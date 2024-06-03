@@ -37,7 +37,7 @@ model Org {
     id                String  @id @default(uuid())
     email             String  @unique
     city              String
-    password_hash     String
+    password          String
     description       String?
     phone             String?
     latitude          Decimal
