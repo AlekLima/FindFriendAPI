@@ -25,7 +25,7 @@ CREATE TABLE "orgs" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "city" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "password_hash" TEXT NOT NULL,
     "description" TEXT,
     "phone" TEXT,
     "latitude" DECIMAL(65,30) NOT NULL,
