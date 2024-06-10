@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
-import { hash } from 'bcryptjs'
+import { PrismaPetsRepository } from '@/repositories/prisma-pets-repository'
+
 
 interface RegisterPetsUseCaseRequest {
     name:              string;
@@ -8,17 +9,22 @@ interface RegisterPetsUseCaseRequest {
 }
 
 
-export async function registerPetsUseCase({
+export class RegisterPetsUseCase {
+    constructor(private petRepository: any) {}
+
+    async execute ({
     name,
     characteristics,
     description,
+    
 }: RegisterPetsUseCaseRequest) {
 
-    await prisma.pet.create({
-        data: {
-            name,
-            characteristics,
-            description,
-        }
+    
+
+    await this.petRepository.create({
+        name,
+        characteristics,
+        description,     
     })
+  }
 }

@@ -1,8 +1,7 @@
-import { prisma } from '@/lib/prisma'
-import { hash } from 'bcryptjs'
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { registerPetsUseCase } from '@/use-cases/registerPets'
+import { RegisterPetsUseCase } from '@/use-cases/registerPets'
+import { PrismaPetsRepository } from '@/repositories/prisma-pets-repository'
 
 export async function registerPet (request: FastifyRequest, reply: FastifyReply) {
     const  registerPetBodySchema = z.object({
@@ -18,7 +17,10 @@ export async function registerPet (request: FastifyRequest, reply: FastifyReply)
      } = registerPetBodySchema.parse(request.body)
 
     try {
-        await registerPetsUseCase({
+        const prismaPetsRepository = new PrismaPetsRepository()
+        const registerPetsUseCase = new RegisterPetsUseCase(prismaPetsRepository)
+
+        await registerPetsUseCase.execute({
             name,
             characteristics,
             description,
