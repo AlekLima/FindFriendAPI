@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { PrismaOrgsRepository } from '@/repositories/prisma-orgs-repository'
+import { PrismaOrgsRepository } from '@/repositories/prisma/prisma-orgs-repository'
 import { RegisterOrgsUseCase } from '@/use-cases/registerOrgs'
 
 export async function registerOrg (request: FastifyRequest, reply: FastifyReply) {
@@ -25,8 +25,8 @@ export async function registerOrg (request: FastifyRequest, reply: FastifyReply)
      } = registerOrgBodySchema.parse(request.body)
 
     try {
-        const prismaOrgsRepository = new PrismaOrgsRepository()
-        const registerOrgsUseCase = new RegisterOrgsUseCase(prismaOrgsRepository)
+        const OrgsRepository = new PrismaOrgsRepository()
+        const registerOrgsUseCase = new RegisterOrgsUseCase(OrgsRepository)
 
         await registerOrgsUseCase.execute({
             email,

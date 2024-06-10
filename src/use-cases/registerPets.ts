@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { PrismaPetsRepository } from '@/repositories/prisma-pets-repository'
+import { PetsRepository } from '@/repositories/pets-repository'
 
 
 interface RegisterPetsUseCaseRequest {
@@ -10,7 +10,7 @@ interface RegisterPetsUseCaseRequest {
 
 
 export class RegisterPetsUseCase {
-    constructor(private petRepository: any) {}
+    constructor(private petRepository: PetsRepository) {}
 
     async execute ({
     name,
@@ -18,9 +18,7 @@ export class RegisterPetsUseCase {
     description,
     
 }: RegisterPetsUseCaseRequest) {
-
     
-
     await this.petRepository.create({
         name,
         characteristics,
