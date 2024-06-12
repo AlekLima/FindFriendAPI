@@ -17,5 +17,27 @@
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "zod": "3.23.8"
-  }
+  },
+  "name": "findfriendapi",
+  "description": "- Deve ser possível cadastrar um pet\r - Deve ser possível listar todos os pets disponíveis para adoção em uma cidade\r - Deve ser possível filtrar pets por suas características\r - Deve ser possível visualizar detalhes de um pet para adoção\r - Deve ser possível se cadastrar como uma ORG\r - Deve ser possível realizar login como uma ORG",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src  --out-dir build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlekLima/FindFriendAPI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlekLima/FindFriendAPI/issues"
+  },
+  "homepage": "https://github.com/AlekLima/FindFriendAPI#readme"
 }
