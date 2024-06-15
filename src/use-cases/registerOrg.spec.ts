@@ -64,7 +64,7 @@ describe('Register Org Use Case', () => {
             longitude: -38.6433024
         })
 
-        expect (() =>
+        await expect (() =>
         registerOrgUseCase.execute({
             city: 'Fortaleza',
             email,

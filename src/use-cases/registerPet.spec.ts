@@ -19,6 +19,6 @@ describe('Register Pet Use Case', () => {
         })
 
         
-        expect(pet.id).toEqual(expect.any(String))
+        await expect(pet.id).toEqual(expect.any(String))
     })
 })
