@@ -1,8 +1,8 @@
-import { expect, it, describe } from 'vitest'
+import { expect, it, describe,beforeEach } from 'vitest'
 import { RegisterPetsUseCase } from './registerPets'
 import { compare } from 'bcryptjs'
 import { inMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pet-repository'
-import { beforeEach } from 'node:test'
+
 
 
 let petRepository: inMemoryPetsRepository

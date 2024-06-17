@@ -4,6 +4,16 @@ import { PetsRepository } from '../pets-repository'
 export class inMemoryPetsRepository implements PetsRepository {
     public items: Pet[] = []
 
+    async findById(id: string) {
+        const pet = this.items.find((item) => item.id === id)
+
+        if (!pet) {
+            return null
+        }
+
+        return pet
+    }
+
 
     async create(data: Prisma.PetCreateInput) {
         const pet = {
