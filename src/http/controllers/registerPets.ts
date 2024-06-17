@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { RegisterPetsUseCase } from '@/use-cases/registerPets'
-import { PrismaPetsRepository } from '@/repositories/prisma/prisma-pets-repository'
+import { makeRegisterPetUseCase } from '@/use-cases/factories/make-register-pet-use-case'
 
 export async function registerPet (request: FastifyRequest, reply: FastifyReply) {
     const  registerPetBodySchema = z.object({
@@ -17,10 +16,9 @@ export async function registerPet (request: FastifyRequest, reply: FastifyReply)
      } = registerPetBodySchema.parse(request.body)
 
     try {
-        const PetsRepository = new PrismaPetsRepository()
-        const registerPetsUseCase = new RegisterPetsUseCase(PetsRepository)
+        const registerPetUseCase = makeRegisterPetUseCase()
 
-        await registerPetsUseCase.execute({
+        await registerPetUseCase.execute({
             name,
             characteristics,
             description,
