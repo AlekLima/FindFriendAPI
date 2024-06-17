@@ -1,11 +1,19 @@
 import { inMemoryOrgsRepository } from "@/repositories/in-memory/in-memory-org-repository";
-import { expect, describe, it } from 'vitest'
+import { expect, describe, it, beforeEach } from 'vitest'
 import { AuthenticateOrgUseCase } from "./authenticateOrg";
 import { hash } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 
+let orgRepository: inMemoryOrgsRepository
+let sut: AuthenticateOrgUseCase
+
 
 describe('Authenticate Org Use Case', () => {
+
+    beforeEach(() => {
+        orgRepository = new inMemoryOrgsRepository()
+        sut = new AuthenticateOrgUseCase(orgRepository)
+    })
 
     it('should be ablew to authenticate', async () => {
         const orgRepository = new inMemoryOrgsRepository()
