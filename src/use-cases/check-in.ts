@@ -20,6 +20,15 @@ export class CheckInUseCase {
         petId,
         orgId,
     }: CheckInUseCaseRequest): Promise<CheckInUseCaseResponse> {
+        const checkInOnSameDay = await this.checkInsRepository.findByOrgIdOnDate(
+            orgId,
+            new Date(),
+        )
+
+        if (checkInOnSameDay) {
+            throw new Error()
+        }
+
         const checkIn = await this.checkInsRepository.create({
             pet_id: petId,
             org_id: orgId,
