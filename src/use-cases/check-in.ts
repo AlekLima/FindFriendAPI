@@ -2,6 +2,9 @@ import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 import { compare } from 'bcryptjs'
 import { CheckIn } from '@prisma/client'
 import { CheckInRepository } from "@/repositories/check-ins-repository";
+import { OrgsRepository } from "@/repositories/orgs-repository";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { getDistanceBetweenCoordenates } from "@/utils/get-distance-between-coordenates";
 
 interface CheckInUseCaseRequest {
     petId: string
@@ -16,12 +19,37 @@ interface CheckInUseCaseResponse {
 
 export class CheckInUseCase { 
     constructor(
-        private checkInsRepository: CheckInRepository) {}
+        private checkInsRepository: CheckInRepository,
+        private orgsRepository: OrgsRepository,
+    ) {} 
+
 
     async execute({
         petId,
         orgId,
+        orgLatitude,
+        orgLongitude,
     }: CheckInUseCaseRequest): Promise <CheckInUseCaseResponse> {
+        const org = await this.orgsRepository.findById(orgId)
+
+        if (!org) {
+            throw new ResourceNotFoundError()
+        }
+
+        const distance = getDistanceBetweenCoordenates(
+            { latitude: orgLatitude, longitude: orgLongitude },
+            {
+                latitude: org.latitude.toNumber(),
+                longitude: org.longitude.toNumber(),
+            },
+        )
+
+        const MAX_DISTANCE_IN_KILOMETERS = 0.1
+
+        if (distance > MAX_DISTANCE_IN_KILOMETERS) {
+            throw new Error()
+        }
+
         const checkInOnSameDay = await this.checkInsRepository.findByOrgIdOnDate(
             orgId,
             new Date(),
@@ -32,9 +60,8 @@ export class CheckInUseCase {
         }
 
         const checkIn = await this.checkInsRepository.create({
-            pet_id: petId,
             org_id: orgId,
-            
+            pet_id: petId,
         })
 
         return {
