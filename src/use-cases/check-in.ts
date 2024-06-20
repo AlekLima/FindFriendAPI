@@ -6,6 +6,8 @@ import { CheckInRepository } from "@/repositories/check-ins-repository";
 interface CheckInUseCaseRequest {
     petId: string
     orgId: string
+    orgLatitude: number
+    orgLongitude: number
 }
 
 interface CheckInUseCaseResponse {
@@ -19,7 +21,7 @@ export class CheckInUseCase {
     async execute({
         petId,
         orgId,
-    }: CheckInUseCaseRequest): Promise<CheckInUseCaseResponse> {
+    }: CheckInUseCaseRequest): Promise <CheckInUseCaseResponse> {
         const checkInOnSameDay = await this.checkInsRepository.findByOrgIdOnDate(
             orgId,
             new Date(),
@@ -32,6 +34,7 @@ export class CheckInUseCase {
         const checkIn = await this.checkInsRepository.create({
             pet_id: petId,
             org_id: orgId,
+            
         })
 
         return {

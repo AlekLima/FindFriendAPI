@@ -1,14 +1,18 @@
 import { expect, describe, it, vi, afterEach , beforeEach } from 'vitest'
 import { inMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-check-ins-repository'
 import { CheckInUseCase } from './check-in'
+import { inMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-org-repository'
+import { Decimal } from '@prisma/client/runtime/library'
 
 let checkInsRepository: inMemoryCheckInsRepository
+let orgsRepository: inMemoryOrgsRepository
 let sut: CheckInUseCase
 
 describe('Check-in Use Case', () => {
     beforeEach(() => {
         checkInsRepository = new inMemoryCheckInsRepository()
-        sut = new CheckInUseCase(checkInsRepository)
+        orgsRepository = new inMemoryOrgsRepository
+        sut = new CheckInUseCase(checkInsRepository, orgsRepository)
         vi.useFakeTimers()
     })
     
@@ -17,9 +21,23 @@ describe('Check-in Use Case', () => {
     })
 
     it ('should be able to check-in', async () => {
+        await orgsRepository.items.push({
+            id: 'org-01',
+            email: 'johndoe@example.com',
+            city: 'Fortaleza',
+            password_hash: '123456',
+            description: 'blablalba',
+            phone: '8599643848',
+            latitude:  new Decimal(0),
+            longitude: new Decimal(0)
+
+        })
+        
         const { checkIn } = await sut.execute({
             orgId: 'org-01',
             petId: 'pet-01',
+            orgLatitude: -3.702784,
+            orgLongitude: -38.6433024
         })
 
         expect(checkIn.id).toEqual(expect.any(String))
@@ -31,11 +49,15 @@ describe('Check-in Use Case', () => {
         await sut.execute({
             orgId: 'org-01',
             petId: 'pet-01',
+            orgLatitude: -3.702784,
+            orgLongitude: -38.6433024
         })
 
         await expect (() => sut.execute({
             orgId: 'org-01',
             petId: 'pet-01',
+            orgLatitude: -3.702784,
+            orgLongitude: -38.6433024
         })).rejects.toBeInstanceOf(Error)
     })
 
@@ -45,13 +67,17 @@ describe('Check-in Use Case', () => {
         await sut.execute({
             orgId: 'org-01',
             petId: 'pet-01',
+            orgLatitude: -3.702784,
+            orgLongitude: -38.6433024
         })
 
         vi.setSystemTime(new Date(2022, 0, 21, 8, 0 ,0))
 
-        const { checkIn }= sut.execute({
+        const { checkIn } = await sut.execute({
             orgId: 'org-01',
-            petId: 'pet-01'
+            petId: 'pet-01',
+            orgLatitude: -3.702784,
+            orgLongitude: -38.6433024
         })
 
         expect(checkIn.id).toEqual(expect.any(String))
