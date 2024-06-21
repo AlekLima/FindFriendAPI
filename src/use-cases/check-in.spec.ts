@@ -9,7 +9,7 @@ let orgsRepository: inMemoryOrgsRepository
 let sut: CheckInUseCase
 
 describe('Check-in Use Case', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         checkInsRepository = new inMemoryCheckInsRepository()
         orgsRepository = new inMemoryOrgsRepository
         sut = new CheckInUseCase(checkInsRepository, orgsRepository)
