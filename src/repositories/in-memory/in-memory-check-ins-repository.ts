@@ -25,6 +25,11 @@ export class inMemoryCheckInsRepository implements CheckInRepository {
         return checkOnSameDate
     }
 
+    async countByPetId(petId: string) {
+        return this.items
+        .filter((item) => item.pet_id === petId).length
+    }
+
     async findManyByOrgId(petId: string, page: number) {
         return this.items
         .filter((checkIn) => checkIn.pet_id === petId)
