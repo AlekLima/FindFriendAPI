@@ -1,6 +1,8 @@
 import { Org, Prisma} from '@prisma/client'
-import { OrgsRepository } from '../orgs-repository'
+import { OrgsRepository, findManyNearbyParams } from '../orgs-repository'
+import { getDistanceBetweenCoordenates } from '@/utils/get-distance-between-coordenates'
 import { randomUUID } from 'crypto'
+
 
 export class inMemoryOrgsRepository implements OrgsRepository {
     public items: Org[] = []
@@ -13,6 +15,22 @@ export class inMemoryOrgsRepository implements OrgsRepository {
         }
 
         return org
+    }
+
+    async findManyNearby(params: findManyNearbyParams) {
+        return this.items.filter((item) => {
+            const distance = getDistanceBetweenCoordenates(
+                { latitude: params.latitude, longitude: params.longitude},
+                {
+                    latitude: Number(item.latitude),
+                    longitude: Number(item.longitude)
+                },
+            )
+
+            console.log(distance)
+
+            return distance < 10
+        })
     }
 
     async findByEmail(email: string) {
@@ -34,7 +52,7 @@ export class inMemoryOrgsRepository implements OrgsRepository {
 
     async create(data: Prisma.OrgCreateInput) {
         const org = {
-            id: 'user-1',
+            id: data.id ?? randomUUID(),
             email: data.email,
             city: data.city,
             password_hash: data.password_hash,
