@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { PrismaOrgsRepository } from '@/repositories/prisma/prisma-orgs-repository'
-import { AuthenticateOrgUseCase } from '@/use-cases/authenticateOrg'
+import { makeAuthenticateOrgUseCase } from '@/use-cases/factories/make-authenticate-org-use-case'
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
 
 export async function authenticate (request: FastifyRequest, reply:FastifyReply) {
@@ -13,13 +12,26 @@ export async function authenticate (request: FastifyRequest, reply:FastifyReply)
     const { email, password  } = authenticateBodySchema.parse(request.body)
 
     try {
-        const orgRepository = new PrismaOrgsRepository()
-        const authenticateOrgUseCase = new AuthenticateOrgUseCase(orgRepository)
+        const authenticateOrgUseCase = makeAuthenticateOrgUseCase()
 
-        await authenticateOrgUseCase.execute({
+        const { org } = await authenticateOrgUseCase.execute({
             email,
             password,
         })
+
+        const token = await reply.jwtSign(
+            {},
+            {
+            sign: {
+                sub:org.id,
+            },
+          },
+        )
+
+        return reply.status(200).send({
+            token,
+        })
+
     } catch (err) {
         if (err instanceof InvalidCredentialsError) {
             return reply.status(400).send({ message: err.message   })
@@ -27,6 +39,4 @@ export async function authenticate (request: FastifyRequest, reply:FastifyReply)
 
         throw err
     }
-
-        return reply.status(200).send()
 }
