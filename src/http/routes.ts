@@ -3,6 +3,7 @@ import { registerOrg } from './controllers/registerOrgs'
 import { registerPet } from './controllers/registerPets'
 import { authenticate } from './controllers/authenticateOrg'
 import { profile } from './controllers/profile'
+import { verifyJWT } from './middlewares/verify-jwt'
 
 export async function appRoutes(app: FastifyInstance) {
     //Org
@@ -10,7 +11,7 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/session', authenticate)
 
     //** Authenticated */
-    app.get('/me', profile)
+    app.get('/me',{ onRequest: [verifyJWT] } ,profile)
 
 
 
