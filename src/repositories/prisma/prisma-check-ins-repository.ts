@@ -33,6 +33,16 @@ export class PrismaCheckInsRepository implements CheckInRepository {
         return count
     }
 
+    async countByOrgId(orgId: string) {
+        const count = await prisma.checkIn.count({
+            where: {
+                org_id: orgId,
+            },
+        })
+
+        return count
+    }
+
     async findById(id: string) {
         const checkIn = await prisma.checkIn.findUnique({
             where: {
