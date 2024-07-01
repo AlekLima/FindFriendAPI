@@ -3,6 +3,8 @@ import { inMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-c
 import { CheckInUseCase } from './check-in'
 import { inMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-org-repository'
 import { Decimal } from '@prisma/client/runtime/library'
+import { MaxNumberOfCheckInsError } from './errors/max-number-of-check-in'
+import { MaxDistanceError } from './errors/max-distance-error'
 
 let checkInsRepository: inMemoryCheckInsRepository
 let orgsRepository: inMemoryOrgsRepository
@@ -14,7 +16,7 @@ describe('Check-in Use Case', () => {
         orgsRepository = new inMemoryOrgsRepository
         sut = new CheckInUseCase(checkInsRepository, orgsRepository)
 
-        orgsRepository.items.push({
+        await orgsRepository.create({
             id: 'org-01',
             email: 'johndoe@example.com',
             city: 'Fortaleza',
@@ -60,7 +62,7 @@ describe('Check-in Use Case', () => {
             petId: 'pet-01',
             orgLatitude: -3.702784,
             orgLongitude: -38.6433024
-        })).rejects.toBeInstanceOf(Error)
+        })).rejects.toBeInstanceOf(MaxNumberOfCheckInsError)
     })
 
     it ('should be able to check in twice in diferent days', async () => {
@@ -105,6 +107,6 @@ describe('Check-in Use Case', () => {
             petId: 'pet-02',
             orgLatitude: -27.2092052,
             orgLongitude: -49.6401091,       
-        })).rejects.toBeInstanceOf(Error)
+        })).rejects.toBeInstanceOf(MaxDistanceError)
     })
 })

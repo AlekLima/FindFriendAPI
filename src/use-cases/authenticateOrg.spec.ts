@@ -16,9 +16,7 @@ describe('Authenticate Org Use Case', () => {
     })
 
     it('should be ablew to authenticate', async () => {
-        const orgRepository = new inMemoryOrgsRepository()
-        const sut = new AuthenticateOrgUseCase(orgRepository)
-
+       
         await orgRepository.create({
             email: 'johndoe@gmail.com',
             password_hash:  await hash('123456', 6),
@@ -37,11 +35,7 @@ describe('Authenticate Org Use Case', () => {
     })
     
     it ('should not be able to authenticate with wrong email', async() => {
-        const orgRepository = new inMemoryOrgsRepository()
-        const sut = new AuthenticateOrgUseCase(orgRepository)
-
        
-
         expect ( sut.execute({
             email: 'johndoe@gmail.com',
             password: '12345789',
@@ -49,8 +43,6 @@ describe('Authenticate Org Use Case', () => {
       })
 
     it ('should not be able to authenticate with wrong password', async() => {
-        const orgRepository = new inMemoryOrgsRepository()
-        const sut = new AuthenticateOrgUseCase(orgRepository)
 
         await orgRepository.create({
             email: 'johndoe@gmail.com',

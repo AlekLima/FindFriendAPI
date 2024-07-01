@@ -23,7 +23,7 @@ export async function authenticate (request: FastifyRequest, reply:FastifyReply)
             {},
             {
             sign: {
-                sub:org.id,
+                sub: org.id,
             },
           },
         )

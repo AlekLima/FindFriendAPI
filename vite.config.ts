@@ -5,7 +5,7 @@ export default defineConfig({
     plugins: [tsconfigPaths()],
     test: {
         environmentMatchGlobs: [
-            ['src/http/cnotrollers/**', 'prisma']
+            ['src/http/controllers/**', 'prisma']
         ],
         dir: 'src',
     },

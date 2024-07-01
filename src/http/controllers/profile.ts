@@ -14,4 +14,4 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
             password_hash: undefined,
         }
     })
-}
+} 
