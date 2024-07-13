@@ -6,6 +6,7 @@ interface GetOrgMetricsUseCaseRequest {
 
 interface GetOrgMetricsUseCaseResponse {
     checkInsCount: number
+   
 }
 
 

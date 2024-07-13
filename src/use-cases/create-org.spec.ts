@@ -22,5 +22,7 @@ describe('Create Org Use Case', () => {
             latitude:  -3.702784,
             longitude: -38.6433024
         })
+
+        expect(org.id).toEqual(expect.any(String))
     })
 })

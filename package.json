@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@fastify/jwt": "8.0.1",
     "@rocketseat/eslint-config": "^2.2.2",
     "@types/node": "^20.12.7",
     "@types/supertest": "6.0.2",
@@ -14,7 +15,6 @@
     "vitest": "1.6.0"
   },
   "dependencies": {
-    "@fastify/jwt": "8.0.1",
     "@prisma/client": "5.13.0",
     "@types/bcryptjs": "2.4.6",
     "@vitest/coverage-v8": "1.6.0",

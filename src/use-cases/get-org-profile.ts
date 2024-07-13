@@ -1,7 +1,6 @@
 import { OrgsRepository } from "@/repositories/orgs-repository";
 import { Org } from "@prisma/client";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { executionAsyncResource } from "async_hooks";
 
 interface GetOrgProfileUseCaseRequest {
     orgId: string

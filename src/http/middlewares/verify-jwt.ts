@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-export async function verifyJWT(
+export async function verifyjwt(
     request: FastifyRequest,
     reply: FastifyReply,
 ) {
@@ -9,4 +9,5 @@ export async function verifyJWT(
     } catch (err) {
         return reply.status(401).send({ message:'Unauthorized' })
     }
+    
 }
