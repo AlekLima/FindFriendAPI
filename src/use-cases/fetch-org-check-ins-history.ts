@@ -15,7 +15,7 @@ export class FetchOrgCheckInsHistoryUseCase {
      constructor(private checkInsRepository: inMemoryCheckInsRepository,) {}
 
      async execute({
-        petId,
+        petId,    
         page,
      }: FetchOrgCheckInsHistoryUseCaseRequest): Promise<FetchOrgCheckInsHistoryUseCaseResponse> {
         const checkIns = await this.checkInsRepository.findManyByOrgId(petId, page)
