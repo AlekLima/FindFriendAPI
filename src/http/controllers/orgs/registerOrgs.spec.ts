@@ -2,6 +2,8 @@ import  request  from 'supertest'
 import { describe, it } from 'vitest'
 import { afterAll,beforeAll, expect } from 'vitest'
 import { app } from '@/app'
+import { createAndAuthenticateOrg } from '@/utils/test/create-and-authenticate-org'
+
 
 describe('Register (e2e)', () => {
     beforeAll(async () => {
@@ -12,8 +14,11 @@ describe('Register (e2e)', () => {
     })
     
     it('should be able to register Org', async() => {
+        const { token } = await createAndAuthenticateOrg(app)
+
         const response = await request(app.server)
         .post('/orgs')
+        .set('Authorization', `Bearer ${token}`)
         .send({
             email: 'johndoeeee@example.com',
             city: 'Fortaleza',

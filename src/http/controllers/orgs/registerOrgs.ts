@@ -9,8 +9,12 @@ export async function registerOrg (request: FastifyRequest, reply: FastifyReply)
         city: z.string(),
         password: z.string().min(6),
         phone: z.string(),
-        latitude: z.number(),
-        longitude: z.number(),
+        latitude: z.number().refine((value) => {
+            return Math.abs(value) <= 90
+        }),
+        longitude: z.number().refine((value) => {
+            return Math.abs(value) <= 180
+        }),
         description: z.string(),
     })
 

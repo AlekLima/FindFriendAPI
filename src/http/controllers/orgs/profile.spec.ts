@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { app } from '@/app'
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { createAndAuthenticateOrg } from '@/utils/test/create-and-authenticate-org'
 
 describe('Profile (e2e)', () => {
     beforeAll(async () => {
@@ -12,24 +13,9 @@ describe('Profile (e2e)', () => {
     })
 
     it('should be able to get Org profile', async () => {
-        await request(app.server).post('/orgs')
-        .send({
-            email: 'e@example.com',
-            city: 'Fortaleza',
-            password: '1234567',
-            description: 'blablalba',
-            phone: '8599643848',
-            latitude:  -3.702784,
-            longitude: -38.6433024
-        })
+        
 
-        const authResponse = await  request(app.server).post('/session')
-        .send({
-            email: 'e@example.com',
-            password: '1234567'
-        })
-
-        const { token } = authResponse.body
+        const { token } = await createAndAuthenticateOrg(app)
 
         const profileResponse = await request(app.server)
         .get('/me')
