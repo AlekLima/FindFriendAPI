@@ -1,9 +1,9 @@
-🧠 Project Overview
+# 🧠 Project Overview
 FindFriendAPI is a backend REST API designed to simulate a system where users can create profiles, log in, and find friends by filtering by gender, age, city, etc.
 
 It uses .NET 6 with Entity Framework Core, SQL Server, and follows a layered architecture: Domain, Application, and Infrastructure.
 
-📦 Technologies Used
+##📦 Technologies Used
 ASP.NET Core 6
 
 Entity Framework Core
@@ -18,17 +18,17 @@ Swagger
 
 xUnit (for testing)
 
-🧱 Architecture (DDD-inspired)
+## 🧱 Architecture (DDD-inspired)
 Project is divided into layers:
 
-1. Domain
+### 1. Domain
 Entities like User, Friend
 
 Enumerations like Gender, States
 
 Domain interfaces (e.g., IUserRepository)
 
-2. Application
+### 2. Application
 Use cases like:
 
 Registering a user
@@ -39,14 +39,14 @@ Finding friends with filters
 
 DTOs and services to handle business logic
 
-3. Infrastructure
+### 3. Infrastructure
 Repository implementations using Entity Framework
 
 DB context
 
 Dependency Injection configuration
 
-4. API
+### 4. API
 Controllers that expose endpoints:
 
 api/user
@@ -57,17 +57,17 @@ api/friends
 
 Swagger for API docs
 
-🔐 Authentication
+## 🔐 Authentication
 JWT is used for securing routes.
 
 Only authenticated users can access the "Find Friends" feature.
 
-🧪 Testing
+## 🧪 Testing
 xUnit is set up for testing.
 
 Some unit tests in FindFriendTests test services like filtering users.
 
-🚀 Example Use Cases
+## 🚀 Example Use Cases
 POST /api/user
 Register a new user.
 
@@ -77,7 +77,7 @@ Authenticate and return a JWT token.
 GET /api/friends
 Find users based on query filters like city, gender, age range.
 
-Application Rules
+## Application Rules
  (x)  It must be possible to register a pet
 
  (x) It must be possible to list all available pets for adoption in a city
@@ -90,7 +90,7 @@ Application Rules
 
  (x) It must be possible to log in as an ORG
 
-Business Rules
+## Business Rules
  (x) To list pets, it's mandatory to provide the city
 
  (x) An ORG must have an address and a WhatsApp number
