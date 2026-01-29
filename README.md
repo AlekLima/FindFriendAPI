@@ -1,338 +1,136 @@
-🐾 FindFriendAPI – General Overview
+🐾 FindFriendAPI
+A backend REST API (Node.js + TypeScript) that simulates a pet adoption platform. Built to demonstrate Clean Architecture, SOLID principles, Domain-Driven Design (DDD), and Test-Driven Development (TDD).
+
 📋 Project Summary
-
-FindFriendAPI is a backend REST API built with Node.js and TypeScript that simulates a pet adoption platform. The system allows organizations (ONGs) to register pets and enables users to search for adoptable pets based on location and characteristics.
-
-This project was developed as a hands-on application of SOLID principles, Clean Architecture, Domain-Driven Design (DDD), and Test-Driven Development (TDD).
+FindFriendAPI lets organizations (ONGs) register pets and lets users search for adoptable animals by city and characteristics. The project focuses on a decoupled, testable architecture with fast in-memory tests and a Prisma + PostgreSQL integration for end-to-end validation.
 
 🎯 Purpose & Vision
+Model real-world adoption rules and constraints
+Apply Clean Architecture with separation of concerns
+Use SOLID principles to guide design
+Decouple business rules from frameworks and databases
+Enable fast, reliable testing via in-memory repositories
+🏗️ Architecture Overview
+Pattern: Clean Architecture
 
-The main goal of this project is to demonstrate how to build a scalable, testable, and well-architected backend by:
+Layers:
 
-Modeling real-world adoption rules and constraints
+HTTP Layer (Interface): Fastify controllers & routes
+Application Layer (Use Cases): Business rules & orchestration
+Domain Layer (Entities): Core models & contracts
+Infrastructure Layer (Repositories): Prisma ORM & other persistence implementations
+Key decisions:
 
-Applying Clean Architecture with strict separation of concerns
+Dependency Inversion — domain defines repository interfaces, infra provides implementations
+Repository Pattern — abstracts persistence, supports Prisma + in-memory repos
+Factory Pattern — centralizes dependency injection for use cases
+Validation at boundaries using Zod (domain remains framework-free)
+🧩 Domain Model
+Core entities and rules:
 
-Using SOLID principles to guide design decisions
+Organization (ORG)
 
-Decoupling business rules from frameworks and databases
-
-Enabling fast and reliable testing through in-memory repositories
-
-🏗️ Architectural Overview
-Architecture Pattern: Clean Architecture
-
-The project is structured following Clean Architecture, ensuring that business rules remain independent of frameworks and infrastructure.
-
-┌─────────────────────────────────────────────┐
-│          HTTP Layer (Interface)             │
-│     Fastify Controllers & Routes            │
-├─────────────────────────────────────────────┤
-│       Application Layer (Use Cases)         │
-│     Business Rules & Orchestration          │
-├─────────────────────────────────────────────┤
-│          Domain Layer (Entities)            │
-│     Core Models & Contracts                 │
-├─────────────────────────────────────────────┤
-│    Infrastructure Layer (Repositories)      │
-│   Prisma ORM & Database Implementations     │
-└─────────────────────────────────────────────┘
-
-🔑 Key Architectural Decisions
-
-Dependency Inversion
-
-The domain defines repository interfaces
-
-Infrastructure provides concrete implementations
-
-Repository Pattern
-
-Abstracts persistence logic
-
-Enables Prisma + In-Memory repositories
-
-Factory Pattern
-
-Centralizes dependency injection for use cases
-
-Domain-Driven Design (DDD)
-
-Business rules live inside use cases
-
-Entities represent real-world concepts
-
-Validation at Boundaries
-
-Zod schemas validate HTTP requests
-
-Domain remains free from validation frameworks
-
-🏢 Domain Model
-Core Entities
-
-The system revolves around three main entities:
-
-🧑 Organization (ORG)
-
-Represents an NGO or shelter responsible for pet adoption.
-
-Attributes
-
-id
-
-name
-
-email
-
-password_hash
-
-address
-
-city
-
-state
-
-zip_code
-
-phone
-
-Business Rules
-
+Attributes: id, name, email, password_hash, address, city, state, zip_code, phone
+Business rules:
 Email must be unique
-
 Passwords must be encrypted
-
 Only authenticated ORGs can register pets
+Pet
 
-🐶 Pet
-
-Represents an adoptable animal.
-
-Attributes
-
-id
-
-name
-
-age
-
-size
-
-energy_level
-
-independence_level
-
-environment
-
-description
-
-org_id
-
-Business Rules
-
+Attributes: id, name, age, size, energy_level, independence_level, environment, description, org_id
+Business rules:
 Every pet belongs to an ORG
-
 Pets can only be created by authenticated ORGs
-
 Pets are searchable by characteristics and location
+Address / Location
 
-📍 Address / Location Logic
-
-Searches are city-based
-
-Ensures pets are shown only from nearby organizations
-
-Entity Relationships
-Organization (1) ──────< Pet (N)
+Searches are city-based to ensure pets are shown from nearby organizations
+Entity relationship: Organization (1) ──< Pet (N)
 
 ⚙️ Core Features & Use Cases
-Organization Management
-
-Register Organization
-
-Authenticate Organization (JWT)
-
-Pet Management
-
-Register Pet
-
-List Pets by City
-
-Filter Pets by Characteristics
-
+Organization management
+Register organization
+Authenticate organization (JWT)
+Pet management
+Register pet
+List pets by city
+Filter pets by characteristics:
 Age
-
 Size
-
 Energy level
-
 Environment
-
 Independence level
-
 🛠️ Technology Stack
-Core Dependencies
-Category	Technology	Purpose
-Runtime	Node.js	JavaScript runtime
-Language	TypeScript	Static typing
-Framework	Fastify	HTTP server
-Database	PostgreSQL	Relational database
-ORM	Prisma	Type-safe persistence
-Auth	JWT	Authentication
-Validation	Zod	Request validation
-Testing	Vitest	Unit testing
-E2E Testing	Supertest	HTTP testing
-Encryption	bcryptjs	Password hashing
+Runtime: Node.js
+Language: TypeScript
+HTTP Framework: Fastify
+Database: PostgreSQL
+ORM: Prisma
+Authentication: JWT
+Validation: Zod
+Testing: Vitest (unit tests)
+E2E Testing: Supertest
+Encryption: bcryptjs
 🧪 Testing Strategy
-
-The project follows TDD principles and uses multiple testing layers:
-
-1. Unit Tests
-
+Unit tests
 Focus on use cases
-
-Use in-memory repositories
-
-Fast, deterministic, isolated
-
-2. Integration / E2E Tests
-
-Full HTTP flow testing
-
-Prisma + test database
-
-Validates authentication, filters, and flows
-
-3. Test Infrastructure
-
+Use in-memory repositories for speed and determinism
+Integration / E2E tests
+Full HTTP flow using Prisma + test DB
+Verify authentication, filters, and flows
+Test infrastructure
 In-memory repositories
-
 Custom Prisma test environment
-
 Coverage reports available
-
 📂 Project Structure
-find-friend-api/
-├── prisma/
-│   ├── migrations/
-│   └── schema.prisma
-├── src/
-│   ├── env/
-│   ├── http/
-│   │   ├── controllers/
-│   │   └── middlewares/
-│   ├── repositories/
-│   │   ├── in-memory/
-│   │   ├── prisma/
-│   │   └── interfaces
-│   ├── use-cases/
-│   │   ├── factories/
-│   │   └── *.ts
-│   ├── utils/
-│   ├── app.ts
-│   └── server.ts
-├── .env.example
-├── docker-compose.yml
-├── package.json
-└── tsconfig.json
+find-friend-api/ ├── prisma/ │ ├── migrations/ │ └── schema.prisma ├── src/ │ ├── env/ │ ├── http/ │ │ ├── controllers/ │ │ └── middlewares/ │ ├── repositories/ │ │ ├── in-memory/ │ │ ├── prisma/ │ │ └── interfaces/ │ ├── use-cases/ │ │ ├── factories/ │ │ └── *.ts │ ├── utils/ │ ├── app.ts │ └── server.ts ├── .env.example ├── docker-compose.yml ├── package.json └── tsconfig.json
 
 🚀 Getting Started
-Prerequisites
+Prerequisites:
 
 Node.js (LTS)
-
 Docker & Docker Compose
-
 npm or yarn
+Quickstart:
 
-Installation
+bash
 git clone https://github.com/AlekLima/FindFriendAPI
 cd FindFriendAPI
 npm install
-
-Environment Setup
 cp .env.example .env
 
-Start Database
+# Start DB
 docker-compose up -d
 
-Run Migrations
+# Run migrations
 npx prisma migrate dev
 
-Start Server
+# Start server (development)
 npm run dev
+Environment and scripts are configured in package.json and .env.example.
 
 🔐 Non-Functional Requirements
-
-Security
-
-Encrypted passwords
-
-JWT authentication
-
-Scalability
-
-Clean Architecture
-
-Repository abstraction
-
-Maintainability
-
-Strong typing
-
-SOLID principles
-
-Testability
-
-Full isolation of business logic
-
-🧠 Learning Outcomes
-
-This project demonstrates:
-
-Practical Clean Architecture
-
-SOLID principles applied in real use cases
-
-Domain-driven backend modeling
-
-Test-first development with Vitest
-
-Dependency inversion and decoupled systems
-
-Production-ready backend patterns
-
+Security: encrypted passwords, JWT authentication
+Scalability: Clean Architecture, repository abstraction
+Maintainability: strong typing, SOLID principles
+Testability: isolation of business logic and in-memory repos
 🔮 Future Enhancements
+Planned improvements:
 
 Adoption request flow
-
 User (adopter) accounts
-
 Image upload for pets
-
-Pagination
-
+Pagination for list endpoints
 Advanced geolocation search
-
 Swagger / OpenAPI documentation
-
 Admin dashboards
-
 📚 References
+Clean Architecture — Robert C. Martin
+SOLID Principles — Robert C. Martin
+Domain-Driven Design — Eric Evans
+If you'd like, I can:
 
-Clean Architecture – Robert C. Martin
-
-SOLID Principles – Robert C. Martin
-
-Domain-Driven Design – Eric Evans
-
-If you want, I can also:
-
-✨ Adapt this README to Portuguese
-
-🔍 Make it more recruiter-focused
-
-📌 Add architecture diagrams
-
-🧪 Add a TDD section per use case
+✨ Translate this README to Portuguese
+🔍 Rework it to be more recruiter-focused
+📌 Add architecture diagrams (SVG/PlantUML)
+🧪 Add a TDD section that maps each use case to tests
