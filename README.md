@@ -1,104 +1,338 @@
-# 🧠 Project Overview
-FindFriendAPI is a backend REST API designed to simulate a system where users can create profiles, log in, and find friends by filtering by gender, age, city, etc.
+🐾 FindFriendAPI – General Overview
+📋 Project Summary
 
-It uses .NET 6 with Entity Framework Core, SQL Server, and follows a layered architecture: Domain, Application, and Infrastructure.
+FindFriendAPI is a backend REST API built with Node.js and TypeScript that simulates a pet adoption platform. The system allows organizations (ONGs) to register pets and enables users to search for adoptable pets based on location and characteristics.
 
-##📦 Technologies Used
-ASP.NET Core 6
+This project was developed as a hands-on application of SOLID principles, Clean Architecture, Domain-Driven Design (DDD), and Test-Driven Development (TDD).
 
-Entity Framework Core
+🎯 Purpose & Vision
 
-SQL Server
+The main goal of this project is to demonstrate how to build a scalable, testable, and well-architected backend by:
 
-AutoMapper
+Modeling real-world adoption rules and constraints
 
-JWT Authentication
+Applying Clean Architecture with strict separation of concerns
 
-Swagger
+Using SOLID principles to guide design decisions
 
-xUnit (for testing)
+Decoupling business rules from frameworks and databases
 
-## 🧱 Architecture (DDD-inspired)
-Project is divided into layers:
+Enabling fast and reliable testing through in-memory repositories
 
-### 1. Domain
-Entities like User, Friend
+🏗️ Architectural Overview
+Architecture Pattern: Clean Architecture
 
-Enumerations like Gender, States
+The project is structured following Clean Architecture, ensuring that business rules remain independent of frameworks and infrastructure.
 
-Domain interfaces (e.g., IUserRepository)
+┌─────────────────────────────────────────────┐
+│          HTTP Layer (Interface)             │
+│     Fastify Controllers & Routes            │
+├─────────────────────────────────────────────┤
+│       Application Layer (Use Cases)         │
+│     Business Rules & Orchestration          │
+├─────────────────────────────────────────────┤
+│          Domain Layer (Entities)            │
+│     Core Models & Contracts                 │
+├─────────────────────────────────────────────┤
+│    Infrastructure Layer (Repositories)      │
+│   Prisma ORM & Database Implementations     │
+└─────────────────────────────────────────────┘
 
-### 2. Application
-Use cases like:
+🔑 Key Architectural Decisions
 
-Registering a user
+Dependency Inversion
 
-Authenticating (login)
+The domain defines repository interfaces
 
-Finding friends with filters
+Infrastructure provides concrete implementations
 
-DTOs and services to handle business logic
+Repository Pattern
 
-### 3. Infrastructure
-Repository implementations using Entity Framework
+Abstracts persistence logic
 
-DB context
+Enables Prisma + In-Memory repositories
 
-Dependency Injection configuration
+Factory Pattern
 
-### 4. API
-Controllers that expose endpoints:
+Centralizes dependency injection for use cases
 
-api/user
+Domain-Driven Design (DDD)
 
-api/auth
+Business rules live inside use cases
 
-api/friends
+Entities represent real-world concepts
 
-Swagger for API docs
+Validation at Boundaries
 
-## 🔐 Authentication
-JWT is used for securing routes.
+Zod schemas validate HTTP requests
 
-Only authenticated users can access the "Find Friends" feature.
+Domain remains free from validation frameworks
 
-## 🧪 Testing
-xUnit is set up for testing.
+🏢 Domain Model
+Core Entities
 
-Some unit tests in FindFriendTests test services like filtering users.
+The system revolves around three main entities:
 
-## 🚀 Example Use Cases
-POST /api/user
-Register a new user.
+🧑 Organization (ORG)
 
-POST /api/auth
-Authenticate and return a JWT token.
+Represents an NGO or shelter responsible for pet adoption.
 
-GET /api/friends
-Find users based on query filters like city, gender, age range.
+Attributes
 
-## Application Rules
- (x)  It must be possible to register a pet
+id
 
- (x) It must be possible to list all available pets for adoption in a city
+name
 
- (x) It must be possible to filter pets by their characteristics
+email
 
- (x) It must be possible to view details of a pet available for adoption
+password_hash
 
- (x) It must be possible to register as an ORG (organization)
+address
 
- (x) It must be possible to log in as an ORG
+city
 
-## Business Rules
- (x) To list pets, it's mandatory to provide the city
+state
 
- (x) An ORG must have an address and a WhatsApp number
+zip_code
 
- (x) A pet must be associated with an ORG
+phone
 
- (x) The user who wants to adopt will contact the ORG via WhatsApp
+Business Rules
 
- (x) All filters besides the city are optional
+Email must be unique
 
- (x) For an ORG to access the application as an admin, it must be logged in
+Passwords must be encrypted
+
+Only authenticated ORGs can register pets
+
+🐶 Pet
+
+Represents an adoptable animal.
+
+Attributes
+
+id
+
+name
+
+age
+
+size
+
+energy_level
+
+independence_level
+
+environment
+
+description
+
+org_id
+
+Business Rules
+
+Every pet belongs to an ORG
+
+Pets can only be created by authenticated ORGs
+
+Pets are searchable by characteristics and location
+
+📍 Address / Location Logic
+
+Searches are city-based
+
+Ensures pets are shown only from nearby organizations
+
+Entity Relationships
+Organization (1) ──────< Pet (N)
+
+⚙️ Core Features & Use Cases
+Organization Management
+
+Register Organization
+
+Authenticate Organization (JWT)
+
+Pet Management
+
+Register Pet
+
+List Pets by City
+
+Filter Pets by Characteristics
+
+Age
+
+Size
+
+Energy level
+
+Environment
+
+Independence level
+
+🛠️ Technology Stack
+Core Dependencies
+Category	Technology	Purpose
+Runtime	Node.js	JavaScript runtime
+Language	TypeScript	Static typing
+Framework	Fastify	HTTP server
+Database	PostgreSQL	Relational database
+ORM	Prisma	Type-safe persistence
+Auth	JWT	Authentication
+Validation	Zod	Request validation
+Testing	Vitest	Unit testing
+E2E Testing	Supertest	HTTP testing
+Encryption	bcryptjs	Password hashing
+🧪 Testing Strategy
+
+The project follows TDD principles and uses multiple testing layers:
+
+1. Unit Tests
+
+Focus on use cases
+
+Use in-memory repositories
+
+Fast, deterministic, isolated
+
+2. Integration / E2E Tests
+
+Full HTTP flow testing
+
+Prisma + test database
+
+Validates authentication, filters, and flows
+
+3. Test Infrastructure
+
+In-memory repositories
+
+Custom Prisma test environment
+
+Coverage reports available
+
+📂 Project Structure
+find-friend-api/
+├── prisma/
+│   ├── migrations/
+│   └── schema.prisma
+├── src/
+│   ├── env/
+│   ├── http/
+│   │   ├── controllers/
+│   │   └── middlewares/
+│   ├── repositories/
+│   │   ├── in-memory/
+│   │   ├── prisma/
+│   │   └── interfaces
+│   ├── use-cases/
+│   │   ├── factories/
+│   │   └── *.ts
+│   ├── utils/
+│   ├── app.ts
+│   └── server.ts
+├── .env.example
+├── docker-compose.yml
+├── package.json
+└── tsconfig.json
+
+🚀 Getting Started
+Prerequisites
+
+Node.js (LTS)
+
+Docker & Docker Compose
+
+npm or yarn
+
+Installation
+git clone https://github.com/AlekLima/FindFriendAPI
+cd FindFriendAPI
+npm install
+
+Environment Setup
+cp .env.example .env
+
+Start Database
+docker-compose up -d
+
+Run Migrations
+npx prisma migrate dev
+
+Start Server
+npm run dev
+
+🔐 Non-Functional Requirements
+
+Security
+
+Encrypted passwords
+
+JWT authentication
+
+Scalability
+
+Clean Architecture
+
+Repository abstraction
+
+Maintainability
+
+Strong typing
+
+SOLID principles
+
+Testability
+
+Full isolation of business logic
+
+🧠 Learning Outcomes
+
+This project demonstrates:
+
+Practical Clean Architecture
+
+SOLID principles applied in real use cases
+
+Domain-driven backend modeling
+
+Test-first development with Vitest
+
+Dependency inversion and decoupled systems
+
+Production-ready backend patterns
+
+🔮 Future Enhancements
+
+Adoption request flow
+
+User (adopter) accounts
+
+Image upload for pets
+
+Pagination
+
+Advanced geolocation search
+
+Swagger / OpenAPI documentation
+
+Admin dashboards
+
+📚 References
+
+Clean Architecture – Robert C. Martin
+
+SOLID Principles – Robert C. Martin
+
+Domain-Driven Design – Eric Evans
+
+If you want, I can also:
+
+✨ Adapt this README to Portuguese
+
+🔍 Make it more recruiter-focused
+
+📌 Add architecture diagrams
+
+🧪 Add a TDD section per use case
